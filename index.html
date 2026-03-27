@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>认字小助手</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#fff9f0;--card:#fffdf8;--primary:#5b8dee;--primary-dark:#3b6fd4;--accent:#ff8c42;--success:#4ecb71;--danger:#ff6b6b;--gold:#ffd60a;--text:#2d2d2d;--muted:#7a7a7a;--border:#eee8de;--shad:0 4px 20px rgba(0,0,0,.08);--r:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+.screen{display:none;height:100dvh;flex-direction:column}
+.screen.active{display:flex}
+.h{overflow-y:auto}
+
+/* HOME */
+.home{padding:24px 20px}
+.home-header{text-align:center;margin-bottom:24px}
+.home-header .e{font-size:64px;margin-bottom:8px;display:block}
+.home-header h1{font-size:28px;font-weight:900}
+.home-header p{color:var(--muted);font-size:14px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.s{background:var(--card);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--shad);border:1px solid var(--border)}
+.s .n{font-size:28px;font-weight:900;color:var(--primary)}
+.s .n.g{color:var(--accent)}
+.s .n.gn{color:var(--success)}
+.s .l{font-size:11px;color:var(--muted);margin-top:2px}
+.section-title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px;letter-spacing:.05em;text-transform:uppercase}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.mode{background:var(--card);border-radius:var(--r);padding:20px 16px;box-shadow:var(--shad);cursor:pointer;text-align:center;border:2.5px solid transparent}
+.mode:active{transform:scale(.97)}
+.mode.pin{border-color:#b3d0ff}
+.mode.chr{border-color:#ffd0b3}
+.mode .me{font-size:40px;margin-bottom:8px;display:block}
+.mode h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.mode p{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:6px}
+.btn{width:100%;padding:14px;background:var(--card);border:2px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;color:var(--text);margin-bottom:10px}
+.btn:active{background:#f5f0e8}
+
+/* GROUP SELECT */
+.gs{padding:20px;overflow-y:auto}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.bk{width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tt{font-size:18px;font-weight:700}
+.glist{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
+.gc{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shad);border:1px solid var(--border);cursor:pointer}
+.gc:active{transform:scale(.98)}
+.gc h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.pb{height:7px;background:#eee8de;border-radius:999px;overflow:hidden;margin-bottom:5px}
+.pf{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.pt{font-size:12px;color:var(--muted)}
+.pt strong{color:var(--success);font-weight:700}
+.abtn{width:100%;padding:15px;background:var(--primary);color:#fff;border:0;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer}
+.abtn:active{background:var(--primary-dark)}
+
+/* QUIZ */
+.quiz{padding:14px 18px 18px}
+.qt{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.qb{width:38px;height:38px;border-radius:11px;background:var(--card);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qp{flex:1;height:9px;background:#eee8de;border-radius:999px;overflow:hidden}
+.qf{height:100%;background:linear-gradient(90deg,var(--primary),#8bb5ff);border-radius:999px;transition:width .3s}
+.qc{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}
+.qa{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.qpr{font-size:72px;font-weight:900;text-align:center;line-height:1}
+.qhi{font-size:13px;color:var(--muted);text-align:center}
+.chos{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;max-width:380px}
+.ch{background:var(--card);border:2.5px solid var(--border);border-radius:15px;font-size:18px;font-weight:700;padding:14px 8px;min-height:58px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s,transform .1s}
+.ch:active{transform:scale(.96)}
+.ch.ok{border-color:var(--success);background:#e8fff0;color:var(--success)}
+.ch.no{border-color:var(--danger);background:#fff0f0;color:var(--danger)}
+.ch:disabled{pointer-events:none}
+.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none}
+.ov .re{font-size:110px;animation:bounce .5s ease}
+@keyframes bounce{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* RESULT */
+.rs{padding:24px 20px;overflow-y:auto}
+.rh{text-align:center;margin-bottom:24px}
+.rh .e{font-size:72px;display:block}
+.rh h2{font-size:26px;font-weight:900;margin:8px 0 4px}
+.rh p{color:var(--muted);font-size:14px}
+.rst{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.rs1{background:var(--card);border-radius:16px;padding:16px 10px;text-align:center;box-shadow:var(--shad);border:1px solid var(--border)}
+.rs1 .n{font-size:30px;font-weight:900}
+.rs1 .n.gn{color:var(--success)}
+.rs1 .n.rd{color:var(--danger)}
+.rs1 .l{font-size:11px;color:var(--muted);margin-top:4px}
+.wb{background:var(--card);border-radius:var(--r);padding:15px 18px;box-shadow:var(--shad);border:1px solid var(--border);margin-bottom:20px}
+.wb h4{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.wcs{display:flex;flex-wrap:wrap;gap:8px}
+.wc{background:#fff0f0;border:1.5px solid var(--danger);border-radius:10px;padding:5px 10px;font-size:13px;font-weight:700;color:var(--danger)}
+.ra{display:flex;flex-direction:column;gap:10px}
+.bp{padding:15px;background:var(--primary);color:#fff;border:0;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;width:100%}
+.bp:active{background:var(--primary-dark)}
+.bs{padding:13px;background:var(--card);color:var(--text);border:2px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;width:100%}
+.bs:active{background:#f5f0e8}
+
+/* PARENT */
+.ps{padding:16px 18px 20px;overflow-y:auto}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.ph h2{font-size:19px;font-weight:900}
+.bx{width:34px;height:34px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cd{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shad);border:1px solid var(--border);margin-bottom:14px}
+.cd h3{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.og{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.oi{text-align:center}
+.oi .n{font-size:28px;font-weight:900;color:var(--primary)}
+.oi .n.gn{color:var(--success)}
+.oi .n.gld{color:var(--accent)}
+.oi .l{font-size:10px;color:var(--muted);margin-top:2px}
+.ml{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:5px}
+.mt{height:12px;background:#eee8de;border-radius:999px;overflow:hidden}
+.mf{height:100%;background:linear-gradient(90deg,var(--success),#7ddf92);border-radius:999px;transition:width .6s;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:flex-end;padding-right:5px}
+.gpi{margin-bottom:12px}
+.gpi:last-child{margin-bottom:0}
+.gph{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.gpn{font-size:13px;font-weight:700}
+.gpc{font-size:11px;color:var(--muted)}
+.gt{height:7px;background:#eee8de;border-radius:999px;overflow:hidden}
+.gff{height:100%;border-radius:999px;transition:width .4s}
+.wcs2{display:flex;flex-wrap:wrap;gap:7px}
+.wc2{background:#fff8e6;border:1.5px solid var(--gold);border-radius:8px;padding:4px 9px;font-size:13px;font-weight:700;color:#9a6e00}
+.rbtn{width:100%;padding:13px;background:var(--card);border:2px solid var(--danger);border-radius:var(--r);color:var(--danger);font-size:14px;font-weight:700;cursor:pointer}
+.rbtn:active{background:#fff0f0}
+</style>
+</head>
+<body>
+
+<div id="home" class="screen active h">
+  <div class="home-header">
+    <span class="e">📚</span>
+    <h1>认字小助手</h1>
+    <p>一年级下学期 · 二类字练习</p>
+  </div>
+  <div class="stats" id="homeStats"></div>
+  <div class="section-title">选择练习模式</div>
+  <div class="modes">
+    <div class="mode pin" onclick="startQuiz('pin')">
+      <span class="me">🔤</span>
+      <h3>字 → 拼音</h3>
+      <p>看汉字，选拼音</p>
+      <span class="badge" id="pinBadge">0 字待复习</span>
+    </div>
+    <div class="mode chr" onclick="startQuiz('chr')">
+      <span class="me">📝</span>
+      <h3>拼音 → 字</h3>
+      <p>看拼音，选汉字</p>
+      <span class="badge" id="chrBadge">0 字待复习</span>
+    </div>
+  </div>
+  <button class="btn" onclick="showGs()">📖 按组练习</button>
+  <button class="btn" onclick="showParent()">👨‍👩‍👧 家长面板</button>
+</div>
+
+<div id="groupSelect" class="screen h">
+  <div class="topbar">
+    <button class="bk" onclick="showScreen('home')">←</button>
+    <div class="tt">选择练习范围</div>
+  </div>
+  <div class="glist" id="glist"></div>
+  <button class="abtn" onclick="startAll()">练习全部字（<span id="tCnt">0</span>字）</button>
+</div>
+
+<div id="quiz" class="screen">
+  <div class="qt">
+    <button class="qb" onclick="confirmQuit()">✕</button>
+    <div class="qp"><div class="qf" id="pFill"></div></div>
+    <div class="qc" id="qCnt">1/10</div>
+  </div>
+  <div class="qa">
+    <div class="qpr" id="qPrompt"></div>
+    <div class="qhi" id="qHint"></div>
+    <div class="chos" id="qChos"></div>
+  </div>
+  <div class="ov" id="qOv" style="display:none">
+    <div class="re" id="qRe"></div>
+  </div>
+</div>
+
+<div id="resultScreen" class="screen h">
+  <div class="rh">
+    <span class="e" id="rEmoji">🎉</span>
+    <h2 id="rTitle">太棒了！</h2>
+    <p id="rSub"></p>
+  </div>
+  <div class="rst" id="rStats"></div>
+  <div class="wb" id="wrongBox" style="display:none">
+    <h4>这些字还需要多练习 👇</h4>
+    <div class="wcs" id="wrongChars"></div>
+  </div>
+  <div class="ra">
+    <button class="bp" id="retryBtn">再练一遍</button>
+    <button class="bs" onclick="showScreen('home')">返回首页</button>
+  </div>
+</div>
+
+<div id="parentScreen" class="screen h">
+  <div class="ph">
+    <h2>👨‍👩‍👧 家长面板</h2>
+    <button class="bx" onclick="showScreen('home')">✕</button>
+  </div>
+  <div class="cd">
+    <h3>总体掌握</h3>
+    <div class="og" id="overviewGrid"></div>
+    <div class="ml"><span>总体掌握率</span><span id="mPct">0%</span></div>
+    <div class="mt"><div class="mf" id="mFill" style="width:0%"></div></div>
+  </div>
+  <div class="cd">
+    <h3>各组进度</h3>
+    <div id="gpiList"></div>
+  </div>
+  <div class="cd">
+    <h3>需要加强的字</h3>
+    <div class="wcs2" id="weakChars2"></div>
+  </div>
+  <button class="rbtn" onclick="confirmReset()">🗑️ 重置所有进度</button>
+</div>
+
+<script type="module">
+import { GROUPS, getAllChars } from './chars.js';
+
+const SK = 'cl_v3';
+let state = {};
+try { state = JSON.parse(localStorage.getItem(SK)) || {}; } catch(e) { state = {}; }
+function sv() { localStorage.setItem(SK, JSON.stringify(state)); }
+function gp(id) {
+  if (!state[id]) state[id] = { ef:2.5, iv:0, rp:0, nr:0, lr:null };
+  return state[id];
+}
+function up(id, q) {
+  const p = gp(id);
+  if (q === 0) {
+    p.rp = 0; p.iv = 1; p.ef = Math.max(1.3, p.ef - 0.2);
+  } else {
+    if (p.rp === 0) p.iv = 1;
+    else if (p.rp === 1) p.iv = 3;
+    else p.iv = Math.round(p.iv * p.ef);
+    p.rp++;
+    if (q === 3) p.iv = Math.round(p.iv * 1.3);
+  }
+  p.ef = Math.max(1.3, p.ef + (q === 3 ? 0.15 : q === 2 ? 0.05 : -0.1));
+  const n = new Date(); n.setHours(0,0,0,0);
+  p.nr = n.getTime() + p.iv * 86400000;
+  p.lr = q >= 2 ? 'ok' : 'fail';
+  sv();
+}
+
+let qM = 'pin', qQ = [], qI = 0, qC = 0, qW = [];
+window._rc = null;
+
+function getAll() {
+  const a = [];
+  GROUPS.forEach((g, gi) => g.chars.forEach((c, ci) => a.push({...c, id:`${gi}-${ci}`, gi})));
+  return a;
+}
+function getDue() {
+  const a = getAll(), n = new Date(); n.setHours(0,0,0,0), now = n.getTime();
+  const d = a.filter(c => { const p = gp(c.id); return !p.nr || p.nr <= now; });
+  const nd = a.filter(c => !d.includes(c)).sort(() => Math.random() - 0.5);
+  return [...d, ...nd.slice(0, Math.ceil(d.length * 0.35))].sort(() => Math.random() - 0.5);
+}
+function getGStats(gi) {
+  const g = GROUPS[gi], ma = 0, le = 0, ne = g.chars.length;
+  let learned = 0, newC = 0;
+  g.chars.forEach((c, ci) => {
+    const p = gp(`${gi}-${ci}`);
+    if (p.rp >= 4 && p.iv >= 7) learned++;
+    else if (p.rp > 0) newC++;
+    else learned++;
+  });
+  return { total: g.chars.length, mastered: learned, learning: newC, newChar: ne - learned - newC };
+}
+
+function ss(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'home') rh();
+  if (id === 'groupSelect') rg();
+  if (id === 'parentScreen') rp();
+}
+
+function rh() {
+  const a = getAll(), n = new Date(); n.setHours(0,0,0,0);
+  let due = 0, mas = 0;
+  a.forEach(c => {
+    const p = gp(c.id);
+    if (!p.nr || p.nr <= n.getTime()) due++;
+    if (p.rp >= 4 && p.iv >= 7) mas++;
+  });
+  const practiced = Object.keys(state).length;
+  document.getElementById('homeStats').innerHTML = `
+    <div class="s"><div class="n">${due}</div><div class="l">今日待复习</div></div>
+    <div class="s"><div class="n gn">${mas}</div><div class="l">已掌握</div></div>
+    <div class="s"><div class="n g">${practiced}</div><div class="l">练习字数</div></div>`;
+  document.getElementById('pinBadge').textContent = `${due} 字待复习`;
+  document.getElementById('chrBadge').textContent = `${due} 字待复习`;
+}
+
+function startQuiz(m) {
+  qM = m;
+  const chars = getDue();
+  if (chars.length === 0) { alert('今日已全部复习完！休息一下吧 🎉'); return; }
+  qQ = chars.slice(0, Math.min(chars.length, 15));
+  qI = 0; qC = 0; qW = [];
+  ss('quiz'); rq();
+}
+
+function showGs() { ss('groupSelect'); }
+
+function rg() {
+  const a = getAll();
+  document.getElementById('tCnt').textContent = a.length;
+  const colors = ['#b3d0ff','#ffd0b3','#d0ffb3','#e0b3ff'];
+  let html = '';
+  GROUPS.forEach((g, gi) => {
+    const s = getGStats(gi);
+    const pct = Math.round(s.mastered / s.total * 100);
+    const color = colors[gi % colors.length];
+    html += `<div class="gc" onclick="startG(${gi})">
+      <h3>${g.name}</h3>
+      <div class="pb"><div class="pf" style="width:${pct}%;background:${color}"></div></div>
+      <div class="pt">已掌握 <strong>${s.mastered}</strong> / ${s.total} 字　新学 <strong>${s.newChar}</strong></div>
+    </div>`;
+  });
+  document.getElementById('glist').innerHTML = html;
+}
+
+function startG(gi) {
+  qM = 'mixed';
+  const chars = GROUPS[gi].chars.map((c, ci) => ({...c, id:`${gi}-${ci}`, gi}));
+  chars.sort(() => Math.random() - 0.5);
+  qQ = chars.slice(0, Math.min(chars.length, 20));
+  qI = 0; qC = 0; qW = [];
+  ss('quiz'); rq();
+}
+
+function startAll() {
+  qM = 'mixed';
+  const chars = getAll().sort(() => Math.random() - 0.5);
+  qQ = chars.slice(0, Math.min(chars.length, 20));
+  qI = 0; qC = 0; qW = [];
+  ss('quiz'); rq();
+}
+
+function rq() {
+  const t = qQ.length;
+  document.getElementById('pFill').style.width = Math.round(qI / t * 100) + '%';
+  document.getElementById('qCnt').textContent = `${qI + 1}/${t}`;
+  const c = qQ[qI];
+  if (qM === 'pin') {
+    document.getElementById('qPrompt').textContent = c.char;
+    document.getElementById('qHint').textContent = '选择正确的拼音';
+    buildPin(c);
+  } else {
+    const tone = c.tone > 0 ? c.tone : '';
+    document.getElementById('qPrompt').innerHTML = `<span style="font-size:44px">${c.pinyin}</span><span style="font-size:28px;color:var(--muted)">${tone}</span>`;
+    document.getElementById('qHint').textContent = '选择正确的汉字';
+    buildChr(c);
+  }
+}
+
+function buildPin(correct) {
+  const a = getAll().filter(x => x.id !== correct.id).sort(() => Math.random() - 0.5).slice(0, 3);
+  const chs = [correct, ...a].sort(() => Math.random() - 0.5);
+  window._rc = correct;
+  document.getElementById('qChos').innerHTML = chs.map(ch =>
+    `<button class="ch" onclick="subPin('${ch.pinyin}')">${ch.pinyin}</button>`
+  ).join('');
+}
+
+function buildChr(correct) {
+  const a = getAll().filter(x => x.id !== correct.id).sort(() => Math.random() - 0.5).slice(0, 3);
+  const chs = [correct, ...a].sort(() => Math.random() - 0.5);
+  window._rc = correct;
+  document.getElementById('qChos').innerHTML = chs.map(ch =>
+    `<button class="ch" onclick="subChr('${ch.char}')">${ch.char}</button>`
+  ).join('');
+}
+
+function subPin(py) {
+  const btns = document.querySelectorAll('.ch');
+  btns.forEach(b => { b.disabled = true; b.onclick = null; });
+  const c = window._rc, ok = py === c.pinyin;
+  btns.forEach(b => {
+    if (b.textContent === c.pinyin) b.classList.add('ok');
+    if (!ok && b.textContent === py) b.classList.add('no');
+  });
+  if (ok) { qC++; up(c.id, 2); showOv('✅', 400); }
+  else { qW.push(c); up(c.id, 0); showOv('❌', 900); }
+  setTimeout(() => nq(), ok ? 600 : 1100);
+}
+
+function subChr(ch) {
+  const btns = document.querySelectorAll('.ch');
+  btns.forEach(b => { b.disabled = true; b.onclick = null; });
+  const c = window._rc, ok = ch === c.char;
+  btns.forEach(b => {
+    if (b.textContent === c.char) b.classList.add('ok');
+    if (!ok && b.textContent === ch) b.classList.add('no');
+  });
+  if (ok) { qC++; up(c.id, 2); showOv('✅', 400); }
+  else { qW.push(c); up(c.id, 0); showOv('❌', 900); }
+  setTimeout(() => nq(), ok ? 600 : 1100);
+}
+
+function showOv(emoji, ms) {
+  const el = document.getElementById('qOv');
+  document.getElementById('qRe').textContent = emoji;
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, ms);
+}
+
+function nq() {
+  qI++;
+  if (qI >= qQ.length) { showResult(); }
+  else { rq(); }
+}
+
+function showResult() {
+  const t = qQ.length, pct = Math.round(qC / t * 100);
+  const titles = [['太棒了！🎉','🎉'],['很不错！👍','👍'],['继续加油！💪','💪'],['多练习几次！📚','📚']];
+  const ti = pct >= 80 ? 0 : pct >= 60 ? 1 : pct >= 40 ? 2 : 3;
+  document.getElementById('rEmoji').textContent = titles[ti][1];
+  document.getElementById('rTitle').textContent = titles[ti][0];
+  document.getElementById('rSub').textContent = `正确率 ${qC} / ${t} 题`;
+  document.getElementById('rStats').innerHTML = `
+    <div class="rs1"><div class="n gn">${qC}</div><div class="l">正确</div></div>
+    <div class="rs1"><div class="n rd">${t - qC}</div><div class="l">错误</div></div>
+    <div class="rs1"><div class="n">${pct}%</div><div class="l">正确率</div></div>`;
+  const wb = document.getElementById('wrongBox');
+  if (qW.length > 0) {
+    wb.style.display = 'block';
+    document.getElementById('wrongChars').innerHTML = qW.map(c => `<span class="wc">${c.char}（${c.pinyin}）</span>`).join('');
+    window._rw = [...qW];
+  } else {
+    wb.style.display = 'none';
+    window._rw = [];
+  }
+  document.getElementById('retryBtn').onclick = retryWrong;
+  ss('resultScreen');
+}
+
+function retryWrong() {
+  if (window._rw && window._rw.length > 0) {
+    qQ = window._rw.slice().sort(() => Math.random() - 0.5);
+    qI = 0; qC = 0; qW = [];
+    ss('quiz'); rq();
+  }
+}
+
+function confirmQuit() {
+  if (confirm('确定退出练习？')) ss('home');
+}
+
+function showParent() { ss('parentScreen'); }
+
+function rp() {
+  const a = getAll(), n = new Date(); n.setHours(0,0,0,0);
+  let mastered = 0, learning = 0, newC = a.length, weak = [];
+  const colors = ['#b3d0ff','#ffd0b3','#d0ffb3','#e0b3ff'];
+  a.forEach(c => {
+    const p = gp(c.id);
+    if (p.rp >= 4 && p.iv >= 7) { mastered++; newC--; }
+    else if (p.rp > 0) { learning++; newC--; }
+    if (p.rp > 0 && p.iv < 3) weak.push(c);
+  });
+  const practiced = Object.keys(state).length;
+  const pct = Math.round(mastered / a.length * 100);
+  document.getElementById('overviewGrid').innerHTML = `
+    <div class="oi"><div class="n">${a.length}</div><div class="l">总字数</div></div>
+    <div class="oi"><div class="n gld">${learning}</div><div class="l">学习中</div></div>
+    <div class="oi"><div class="n gn">${mastered}</div><div class="l">已掌握</div></div>`;
+  document.getElementById('mPct').textContent = pct + '%';
+  document.getElementById('mFill').style.width = pct + '%';
+  document.getElementById('mFill').textContent = pct + '%';
+
+  let ghtml = '';
+  GROUPS.forEach((g, gi) => {
+    const s = getGStats(gi);
+    const pct2 = Math.round(s.mastered / s.total * 100);
+    const color = colors[gi % colors.length];
+    ghtml += `<div class="gpi">
+      <div class="gph"><span class="gpn">${g.name}</span><span class="gpc">${s.mastered}/${s.total} 掌握</span></div>
+      <div class="gt"><div class="gff" style="width:${pct2}%;background:${color}"></div></div>
+    </div>`;
+  });
+  document.getElementById('gpiList').innerHTML = ghtml;
+
+  if (weak.length > 0) {
+    document.getElementById('weakChars2').innerHTML = weak.slice(0, 30).map(c =>
+      `<span class="wc2">${c.char}</span>`
+    ).join('');
+  } else {
+    document.getElementById('weakChars2').innerHTML = '<div style="color:var(--muted);font-size:13px">暂无薄弱字，继续保持！</div>';
+  }
+}
+
+function confirmReset() {
+  if (confirm('确定要重置所有进度吗？此操作不可撤销。')) {
+    state = {};
+    sv();
+    rp();
+  }
+}
+
+// Init
+rh();
+</script>
+</body>
+</html>
