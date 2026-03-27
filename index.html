@@ -6,114 +6,7 @@
 <title>认字小助手</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#fff9f0;--card:#fffdf8;--primary:#5b8dee;--primary-dark:#3b6fd4;--accent:#ff8c42;--success:#4ecb71;--danger:#ff6b6b;--gold:#ffd60a;--text:#2d2d2d;--muted:#7a7a7a;--border:#eee8de;--shad:0 4px 20px rgba(0,0,0,.08);--r:20px}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-.screen{display:none;height:100dvh;flex-direction:column}
-.screen.active{display:flex}
-.h{overflow-y:auto}
-.home{padding:24px 20px}
-.home-header{text-align:center;margin-bottom:24px}
-.home-header .e{font-size:64px;margin-bottom:8px;display:block}
-.home-header h1{font-size:28px;font-weight:900}
-.home-header p{color:var(--muted);font-size:14px;margin-top:4px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-.s{background:var(--card);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--shad);border:1px solid var(--border)}
-.s .n{font-size:28px;font-weight:900;color:var(--primary)}
-.s .n.g{color:var(--accent)}
-.s .n.gn{color:var(--success)}
-.s .l{font-size:11px;color:var(--muted);margin-top:2px}
-.section-title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px;letter-spacing:.05em;text-transform:uppercase}
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.mode{background:var(--card);border-radius:var(--r);padding:20px 16px;box-shadow:var(--shad);cursor:pointer;text-align:center;border:2.5px solid transparent}
-.mode:active{transform:scale(.97)}
-.mode.pin{border-color:#b3d0ff}
-.mode.chr{border-color:#ffd0b3}
-.mode .me{font-size:40px;margin-bottom:8px;display:block}
-.mode h3{font-size:15px;font-weight:700;margin-bottom:4px}
-.mode p{font-size:12px;color:var(--muted)}
-.badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:6px}
-.btn{width:100%;padding:14px;background:var(--card);border:2px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;color:var(--text);margin-bottom:10px}
-.btn:active{background:#f5f0e8}
-.gs{padding:20px;overflow-y:auto}
-.topbar{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.bk{width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tt{font-size:18px;font-weight:700}
-.glist{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
-.gc{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shad);border:1px solid var(--border);cursor:pointer}
-.gc:active{transform:scale(.98)}
-.gc h3{font-size:14px;font-weight:700;margin-bottom:6px}
-.pb{height:7px;background:#eee8de;border-radius:999px;overflow:hidden;margin-bottom:5px}
-.pf{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
-.pt{font-size:12px;color:var(--muted)}
-.pt strong{color:var(--success);font-weight:700}
-.abtn{width:100%;padding:15px;background:var(--primary);color:#fff;border:0;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer}
-.abtn:active{background:var(--primary-dark)}
-.quiz{padding:14px 18px 18px}
-.qt{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.qb{width:38px;height:38px;border-radius:11px;background:var(--card);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.qp{flex:1;height:9px;background:#eee8de;border-radius:999px;overflow:hidden}
-.qf{height:100%;background:linear-gradient(90deg,var(--primary),#8bb5ff);border-radius:999px;transition:width .3s}
-.qc{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}
-.qa{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
-.qpr{font-size:72px;font-weight:900;text-align:center;line-height:1}
-.qhi{font-size:13px;color:var(--muted);text-align:center}
-.chos{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;max-width:380px}
-.ch{background:var(--card);border:2.5px solid var(--border);border-radius:15px;font-size:18px;font-weight:700;padding:14px 8px;min-height:58px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s,transform .1s}
-.ch:active{transform:scale(.96)}
-.ch.ok{border-color:var(--success);background:#e8fff0;color:var(--success)}
-.ch.no{border-color:var(--danger);background:#fff0f0;color:var(--danger)}
-.ch.wip{pointer-events:none;opacity:.6}
-.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none}
-.ov .re{font-size:110px;animation:bounce .5s ease}
-@keyframes bounce{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
-.rs{padding:24px 20px;overflow-y:auto}
-.rh{text-align:center;margin-bottom:24px}
-.rh .e{font-size:72px;display:block}
-.rh h2{font-size:26px;font-weight:900;margin:8px 0 4px}
-.rh p{color:var(--muted);font-size:14px}
-.rst{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-.rs1{background:var(--card);border-radius:16px;padding:16px 10px;text-align:center;box-shadow:var(--shad);border:1px solid var(--border)}
-.rs1 .n{font-size:30px;font-weight:900}
-.rs1 .n.gn{color:var(--success)}
-.rs1 .n.rd{color:var(--danger)}
-.rs1 .l{font-size:11px;color:var(--muted);margin-top:4px}
-.wb{background:var(--card);border-radius:var(--r);padding:15px 18px;box-shadow:var(--shad);border:1px solid var(--border);margin-bottom:20px}
-.wb h4{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
-.wcs{display:flex;flex-wrap:wrap;gap:8px}
-.wc{background:#fff0f0;border:1.5px solid var(--danger);border-radius:10px;padding:5px 10px;font-size:13px;font-weight:700;color:var(--danger)}
-.ra{display:flex;flex-direction:column;gap:10px}
-.bp{padding:15px;background:var(--primary);color:#fff;border:0;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;width:100%}
-.bp:active{background:var(--primary-dark)}
-.bs{padding:13px;background:var(--card);color:var(--text);border:2px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;width:100%}
-.bs:active{background:#f5f0e8}
-.ps{padding:16px 18px 20px;overflow-y:auto}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.ph h2{font-size:19px;font-weight:900}
-.bx{width:34px;height:34px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cd{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shad);border:1px solid var(--border);margin-bottom:14px}
-.cd h3{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
-.og{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.oi{text-align:center}
-.oi .n{font-size:28px;font-weight:900;color:var(--primary)}
-.oi .n.gn{color:var(--success)}
-.oi .n.gld{color:var(--accent)}
-.oi .l{font-size:10px;color:var(--muted);margin-top:2px}
-.ml{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:5px}
-.mt{height:12px;background:#eee8de;border-radius:999px;overflow:hidden}
-.mf{height:100%;background:linear-gradient(90deg,var(--success),#7ddf92);border-radius:999px;transition:width .6s;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:flex-end;padding-right:5px}
-.gpi{margin-bottom:12px}
-.gpi:last-child{margin-bottom:0}
-.gph{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.gpn{font-size:13px;font-weight:700}
-.gpc{font-size:11px;color:var(--muted)}
-.gt{height:7px;background:#eee8de;border-radius:999px;overflow:hidden}
-.gff{height:100%;border-radius:999px;transition:width .4s}
-.wcs2{display:flex;flex-wrap:wrap;gap:7px}
-.wc2{background:#fff8e6;border:1.5px solid var(--gold);border-radius:8px;padding:4px 9px;font-size:13px;font-weight:700;color:#9a6e00}
-.rbtn{width:100%;padding:13px;background:var(--card);border:2px solid var(--danger);border-radius:var(--r);color:var(--danger);font-size:14px;font-weight:700;cursor:pointer}
-.rbtn:active{background:#fff0f0}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}body{font-family:'Noto Sans SC',sans-serif;background:#fff9f0;color:#2d2d2d;overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}.screen{display:none;height:100dvh;flex-direction:column}.screen.active{display:flex}.h{overflow-y:auto}.home{padding:24px 20px}.home-header{text-align:center;margin-bottom:24px}.home-header .e{font-size:64px;margin-bottom:8px;display:block}.home-header h1{font-size:28px;font-weight:900}.home-header p{color:#7a7a7a;font-size:14px;margin-top:4px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}.s{background:#fffdf8;border-radius:16px;padding:14px 10px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #eee8de}.s .n{font-size:28px;font-weight:900;color:#5b8dee}.s .n.g{color:#ff8c42}.s .n.gn{color:#4ecb71}.s .l{font-size:11px;color:#7a7a7a;margin-top:2px}.section-title{font-size:12px;color:#7a7a7a;font-weight:600;margin-bottom:10px;letter-spacing:.05em;text-transform:uppercase}.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}.mode{background:#fffdf8;border-radius:20px;padding:20px 16px;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;text-align:center;border:2.5px solid transparent}.mode:active{transform:scale(.97)}.mode.pin{border-color:#b3d0ff}.mode.chr{border-color:#ffd0b3}.mode .me{font-size:40px;margin-bottom:8px;display:block}.mode h3{font-size:15px;font-weight:700;margin-bottom:4px}.mode p{font-size:12px;color:#7a7a7a}.badge{display:inline-block;background:#5b8dee;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:6px}.btn{width:100%;padding:14px;background:#fffdf8;border:2px solid #eee8de;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;color:#2d2d2d;margin-bottom:10px}.btn:active{background:#f5f0e8}.abtn{width:100%;padding:15px;background:#5b8dee;color:#fff;border:0;border-radius:20px;font-size:15px;font-weight:700;cursor:pointer}.abtn:active{background:#3b6fd4}.topbar{display:flex;align-items:center;gap:12px;margin-bottom:20px}.bk{width:40px;height:40px;border-radius:12px;background:#fffdf8;border:1px solid #eee8de;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}.tt{font-size:18px;font-weight:700}.glist{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:20px}.gc{background:#fffdf8;border-radius:20px;padding:16px 18px;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #eee8de;cursor:pointer}.gc:active{transform:scale(.98)}.gc h3{font-size:14px;font-weight:700;margin-bottom:6px}.pb{height:7px;background:#eee8de;border-radius:999px;overflow:hidden;margin-bottom:5px}.pf{height:100%;background:#4ecb71;border-radius:999px;transition:width .4s}.pt{font-size:12px;color:#7a7a7a}.pt strong{color:#4ecb71;font-weight:700}.quiz{padding:14px 18px 12px}.quiz-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.qb{width:38px;height:38px;border-radius:11px;background:#fffdf8;border:1px solid #eee8de;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}.qp{flex:1;height:9px;background:#eee8de;border-radius:999px;overflow:hidden}.qf{height:100%;background:linear-gradient(90deg,#5b8dee,#8bb5ff);border-radius:999px;transition:width .3s}.qc{font-size:13px;font-weight:700;color:#7a7a7a;white-space:nowrap}.qa{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:0;padding:0 18px}.qpr{font-size:72px;font-weight:900;text-align:center;line-height:1}.qhi{font-size:13px;color:#7a7a7a;text-align:center}.chos{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;max-width:380px}.ch{background:#fffdf8;border:2.5px solid #eee8de;border-radius:15px;font-size:18px;font-weight:700;padding:14px 8px;min-height:58px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s,transform .1s}.ch:active{transform:scale(.96)}.ch.ok{border-color:#4ecb71;background:#e8fff0;color:#4ecb71}.ch.no{border-color:#ff6b6b;background:#fff0f0;color:#ff6b6b}.ch.wip{pointer-events:none;opacity:.6}.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none}.ov .re{font-size:110px;animation:bounce .5s ease}@keyframes bounce{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}.hw-panel{display:none;flex-direction:column;align-items:center;gap:8px;padding:12px 16px 16px;background:#fffdf8;border-top:2px solid #eee8de;width:100%;flex-shrink:0}.hw-panel.active{display:flex}.hw-hint{font-size:12px;color:#7a7a7a;text-align:center}.hw-input{width:100%;max-width:360px;padding:14px 16px;border:2.5px solid #eee8de;border-radius:12px;font-size:22px;font-weight:700;font-family:'Noto Sans SC',sans-serif;background:#fff;outline:none;color:#2d2d2d;text-align:center;display:block}.hw-input:focus{border-color:#ff8c42}.hw-input::placeholder{color:#ccc;font-size:14px;font-weight:400}.hw-row{width:100%;max-width:360px;display:flex;gap:8px}.hw-ok{flex:1;padding:12px;background:#4ecb71;color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}.hw-ok:active{opacity:.85}.hw-cancel{flex:1;padding:12px;background:#fff;border:2px solid #eee8de;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;color:#7a7a7a}.rs{padding:24px 20px;overflow-y:auto}.rh{text-align:center;margin-bottom:24px}.rh .e{font-size:72px;display:block}.rh h2{font-size:26px;font-weight:900;margin:8px 0 4px}.rh p{color:#7a7a7a;font-size:14px}.rst{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}.rs1{background:#fffdf8;border-radius:16px;padding:16px 10px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #eee8de}.rs1 .n{font-size:30px;font-weight:900}.rs1 .n.gn{color:#4ecb71}.rs1 .n.rd{color:#ff6b6b}.rs1 .l{font-size:11px;color:#7a7a7a;margin-top:4px}.wb{background:#fffdf8;border-radius:20px;padding:15px 18px;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #eee8de;margin-bottom:20px}.wb h4{font-size:13px;font-weight:700;color:#7a7a7a;margin-bottom:10px}.wcs{display:flex;flex-wrap:wrap;gap:8px}.wc{background:#fff0f0;border:1.5px solid #ff6b6b;border-radius:10px;padding:5px 10px;font-size:13px;font-weight:700;color:#ff6b6b}.ra{display:flex;flex-direction:column;gap:10px}.bp{padding:15px;background:#5b8dee;color:#fff;border:0;border-radius:20px;font-size:15px;font-weight:700;cursor:pointer;width:100%}.bp:active{background:#3b6fd4}.bs{padding:13px;background:#fffdf8;color:#2d2d2d;border:2px solid #eee8de;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;width:100%}.bs:active{background:#f5f0e8}.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.ph h2{font-size:19px;font-weight:900}.bx{width:34px;height:34px;border-radius:10px;background:#fffdf8;border:1px solid #eee8de;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}.cd{background:#fffdf8;border-radius:20px;padding:16px 18px;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #eee8de;margin-bottom:14px}.cd h3{font-size:11px;color:#7a7a7a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}.og{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}.oi{text-align:center}.oi .n{font-size:28px;font-weight:900;color:#5b8dee}.oi .n.gn{color:#4ecb71}.oi .n.gld{color:#ff8c42}.oi .l{font-size:10px;color:#7a7a7a;margin-top:2px}.ml{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:5px}.mt{height:12px;background:#eee8de;border-radius:999px;overflow:hidden}.mf{height:100%;background:linear-gradient(90deg,#4ecb71,#7ddf92);border-radius:999px;transition:width .6s;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:flex-end;padding-right:5px}.gpi{margin-bottom:12px}.gpi:last-child{margin-bottom:0}.gph{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.gpn{font-size:13px;font-weight:700}.gpc{font-size:11px;color:#7a7a7a}.gt{height:7px;background:#eee8de;border-radius:999px;overflow:hidden}.gff{height:100%;border-radius:999px;transition:width .4s}.wcs2{display:flex;flex-wrap:wrap;gap:7px}.wc2{background:#fff8e6;border:1.5px solid #ffd60a;border-radius:8px;padding:4px 9px;font-size:13px;font-weight:700;color:#9a6e00}.rbtn{width:100%;padding:13px;background:#fffdf8;border:2px solid #ff6b6b;border-radius:20px;color:#ff6b6b;font-size:14px;font-weight:700;cursor:pointer}.rbtn:active{background:#fff0f0}.char-list{display:flex;flex-wrap:wrap;gap:6px;max-height:200px;overflow-y:auto}.char-list.tall{max-height:320px}.char-chip{background:#e8fff0;border:1.5px solid #4ecb71;border-radius:8px;padding:4px 8px;font-size:13px;font-weight:700;color:#2d2d2d;display:flex;flex-direction:column;align-items:center;min-width:38px}.char-chip .cp{font-size:10px;color:#4ecb71;font-weight:400;margin-top:1px}.char-chip.new-chr{background:#fffdf8;border:1.5px solid #eee8de;color:#ccc}.char-chip .rp-label{font-size:9px;color:#7a7a7a;font-weight:400;margin-top:2px}.imode{padding:20px}.imode h2{font-size:20px;font-weight:900;text-align:center;margin-bottom:6px}.imode p{color:#7a7a7a;font-size:13px;text-align:center;margin-bottom:24px}.im-btns{display:flex;flex-direction:column;gap:12px}.imb{background:#fffdf8;border:3px solid #eee8de;border-radius:20px;padding:24px 20px;cursor:pointer;text-align:center;transition:border-color .15s,transform .1s}.imb:active{transform:scale(.98)}.imb.chs{border-color:#5b8dee}.imb.chs:active{border-color:#3b6fd4}.imb.hw{border-color:#ff8c42}.imb.hw:active{border-color:#e07030}.imb .ime{font-size:48px;display:block;margin-bottom:8px}.imb h3{font-size:16px;font-weight:700;margin-bottom:4px}.imb p{font-size:12px;color:#7a7a7a;margin:0}
 </style>
 </head>
 <body>
@@ -122,38 +15,73 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   <div class="stats" id="homeStats"></div>
   <div class="section-title">选择练习模式</div>
   <div class="modes">
-    <div class="mode pin" id="btnPin"><span class="me">🔤</span><h3>字 → 拼音</h3><p>看汉字，选拼音</p><span class="badge" id="pinBadge">0 字待复习</span></div>
-    <div class="mode chr" id="btnChr"><span class="me">📝</span><h3>拼音 → 字</h3><p>看拼音，选汉字</p><span class="badge" id="chrBadge">0 字待复习</span></div>
+    <div class="mode pin" id="btnPin"><span class="me">🔤</span><h3>字 → 拼音</h3><p>看汉字，写拼音</p><span class="badge" id="pinBadge">0 字待复习</span></div>
+    <div class="mode chr" id="btnChr"><span class="me">📝</span><h3>拼音 → 字</h3><p>看拼音，写汉字</p><span class="badge" id="chrBadge">0 字待复习</span></div>
   </div>
   <button class="btn" id="btnGroup">📖 按组练习</button>
   <button class="btn" id="btnParent">👨‍👩‍👧 家长面板</button>
 </div>
+
 <div id="groupSelect" class="screen h">
   <div class="topbar"><button class="bk" id="btnBackHome">←</button><div class="tt">选择练习范围</div></div>
   <div class="glist" id="glist"></div>
   <button class="abtn" id="btnAll">练习全部字（<span id="tCnt">0</span>字）</button>
 </div>
+
+<div id="inputSelect" class="screen h">
+  <div class="topbar"><button class="bk" id="btnBackMode">←</button><div class="tt" id="iModeTitle">选择答题方式</div></div>
+  <div class="imode">
+    <h2 id="iModeSub">准备好了吗？</h2>
+    <p id="iModeDesc">选择一种方式来答题</p>
+    <div class="im-btns">
+      <div class="imb chs" id="btnIchs">
+        <span class="ime">☑️</span>
+        <h3>选择答题</h3>
+        <p>看题后点选正确答案</p>
+      </div>
+      <div class="imb hw" id="btnIhw">
+        <span class="ime">✍️</span>
+        <h3>手写输入</h3>
+        <p>用手写输入法书写拼音或汉字</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="quiz" class="screen">
-  <div class="qt"><button class="qb" id="btnQuit">✕</button><div class="qp"><div class="qf" id="pFill"></div></div><div class="qc" id="qCnt">1/10</div></div>
-  <div class="qa"><div class="qpr" id="qPrompt"></div><div class="qhi" id="qHint"></div><div class="chos" id="qChos"></div></div>
+  <div class="quiz-top"><button class="qb" id="btnQuit">✕</button><div class="qp"><div class="qf" id="pFill"></div></div><div class="qc" id="qCnt">1/10</div></div>
+  <div class="qa">
+    <div class="qpr" id="qPrompt"></div>
+    <div class="qhi" id="qHint"></div>
+  </div>
+  <div class="hw-panel" id="hwPanel">
+    <div class="hw-hint" id="hwHint"></div>
+    <input class="hw-input" id="hwInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder=""/>
+    <div class="hw-row"><button class="hw-ok" id="hwOkBtn">✓ 确认</button><button class="hw-cancel" id="hwCancelBtn">取消</button></div>
+  </div>
   <div class="ov" id="qOv" style="display:none"><div class="re" id="qRe"></div></div>
 </div>
+
 <div id="resultScreen" class="screen h">
   <div class="rh"><span class="e" id="rEmoji">🎉</span><h2 id="rTitle">太棒了！</h2><p id="rSub"></p></div>
   <div class="rst" id="rStats"></div>
   <div class="wb" id="wrongBox" style="display:none"><h4>这些字还需要多练习 👇</h4><div class="wcs" id="wrongChars"></div></div>
   <div class="ra"><button class="bp" id="retryBtn">再练一遍</button><button class="bs" id="btnBackHome2">返回首页</button></div>
 </div>
+
 <div id="parentScreen" class="screen h">
   <div class="ph"><h2>👨‍👩‍👧 家长面板</h2><button class="bx" id="btnCloseParent">✕</button></div>
   <div class="cd"><h3>总体掌握</h3><div class="og" id="overviewGrid"></div><div class="ml"><span>总体掌握率</span><span id="mPct">0%</span></div><div class="mt"><div class="mf" id="mFill" style="width:0%"></div></div></div>
   <div class="cd"><h3>各组进度</h3><div id="gpiList"></div></div>
-  <div class="cd"><h3>需要加强的字</h3><div class="wcs2" id="weakChars2"></div></div>
+  <div class="cd"><h3>✅ 已掌握的字</h3><div class="char-list" id="masteredList"></div></div>
+  <div class="cd"><h3>📖 还未掌握的字</h3><div class="char-list tall" id="unmasteredList"></div></div>
   <button class="rbtn" id="btnReset">🗑️ 重置所有进度</button>
 </div>
+
 <script type="module">
-import { GROUPS, getAllChars } from './chars.js';
-const SK = 'cl_v4';
+import { GROUPS } from './chars.js';
+
+const SK = 'cl_v5';
 let state = {};
 try { state = JSON.parse(localStorage.getItem(SK)) || {}; } catch(e) { state = {}; }
 function sv() { localStorage.setItem(SK, JSON.stringify(state)); }
@@ -168,31 +96,39 @@ function up(id, q) {
   p.lr = q >= 2 ? 'ok' : 'fail';
   sv();
 }
-function getAll() {
-  const a = [];
-  GROUPS.forEach((g, gi) => g.chars.forEach((c, ci) => a.push({...c, id:gi+'-'+ci, gi})));
-  return a;
+function getAll() { const a = []; GROUPS.forEach((g, gi) => g.chars.forEach((c, ci) => a.push({...c, id:gi+'-'+ci, gi}))); return a; }
+function getDue() { const a = getAll(), n = new Date(); n.setHours(0,0,0,0); const now = n.getTime(); const d = a.filter(c => { const p = gp(c.id); return !p.nr || p.nr <= now; }); const nd = a.filter(c => !d.includes(c)).sort(() => Math.random() - 0.5); return [...d, ...nd.slice(0, Math.ceil(d.length * 0.35))].sort(() => Math.random() - 0.5); }
+function getGStats(gi) { const g = GROUPS[gi]; let mastered = 0, learning = 0; g.chars.forEach((c, ci) => { const p = gp(gi+'-'+ci); if (p.rp >= 3 && p.iv >= 7) mastered++; else if (p.rp > 0) learning++; }); return {total: g.chars.length, mastered, learning, newChar: g.chars.length - mastered - learning}; }
+
+// st(): remove tone marks from pinyin
+// normalize: strip tone marks + ü→u + Ě→e (for "ě" like special chars)
+function st(s) {
+  // first replace bare ü/Ü before any tone stripping
+  s = s.replace(/ü/g, 'u').replace(/Ü/g, 'U');
+  return s.replace(/[āáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜ]/g, function(m) {
+    const t = {'ā':'a','á':'a','ǎ':'a','à':'a','ō':'o','ó':'o','ǒ':'o','ò':'o','ē':'e','é':'e','ě':'e','è':'e','ī':'i','í':'i','ǐ':'i','ì':'i','ū':'u','ú':'u','ǔ':'u','ù':'u','ǖ':'u','ǘ':'u','ǚ':'u','ǜ':'u'};
+    return t[m] || m;
+  });
 }
-function getDue() {
-  const a = getAll(), n = new Date(); n.setHours(0,0,0,0); const now = n.getTime();
-  const d = a.filter(c => { const p = gp(c.id); return !p.nr || p.nr <= now; });
-  const nd = a.filter(c => !d.includes(c)).sort(() => Math.random() - 0.5);
-  return [...d, ...nd.slice(0, Math.ceil(d.length * 0.35))].sort(() => Math.random() - 0.5);
-}
-function getGStats(gi) {
-  const g = GROUPS[gi]; let mastered = 0, learning = 0;
-  g.chars.forEach((c, ci) => { const p = gp(gi+'-'+ci); if (p.rp >= 4 && p.iv >= 7) mastered++; else if (p.rp > 0) learning++; });
-  return {total: g.chars.length, mastered, learning, newChar: g.chars.length - mastered - learning};
-}
+
 let qM = 'pin', qQ = [], qI = 0, qC = 0, qW = [], _cur = null, _busy = false;
-function ss(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); if (id === 'home') rh(); if (id === 'groupSelect') rg(); if (id === 'parentScreen') rp(); }
+
+function ss(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'home') rh();
+  if (id === 'groupSelect') rg();
+  if (id === 'parentScreen') rp();
+}
+
 function rh() {
   const a = getAll(), n = new Date(); n.setHours(0,0,0,0); let due = 0, mas = 0;
-  a.forEach(c => { const p = gp(c.id); if (!p.nr || p.nr <= n.getTime()) due++; if (p.rp >= 4 && p.iv >= 7) mas++; });
+  a.forEach(c => { const p = gp(c.id); if (!p.nr || p.nr <= n.getTime()) due++; if (p.rp >= 3 && p.iv >= 7) mas++; });
   document.getElementById('homeStats').innerHTML = '<div class="s"><div class="n">'+due+'</div><div class="l">今日待复习</div></div><div class="s"><div class="n gn">'+mas+'</div><div class="l">已掌握</div></div><div class="s"><div class="n g">'+Object.keys(state).length+'</div><div class="l">练习字数</div></div>';
   document.getElementById('pinBadge').textContent = due+' 字待复习';
   document.getElementById('chrBadge').textContent = due+' 字待复习';
 }
+
 function rg() {
   const a = getAll(); document.getElementById('tCnt').textContent = a.length;
   const colors = ['#b3d0ff','#ffd0b3','#d0ffb3','#e0b3ff'];
@@ -203,76 +139,97 @@ function rg() {
   });
   document.getElementById('glist').innerHTML = html;
 }
-function startQuiz(m) { qM = m; const chars = getDue(); if (chars.length === 0) { alert('今日已全部复习完！休息一下吧 🎉'); return; } qQ = chars.slice(0, Math.min(chars.length, 15)); qI = 0; qC = 0; qW = []; _busy = false; ss('quiz'); rq(); }
-function startG(gi) { qM = 'mixed'; const chars = GROUPS[gi].chars.map((c, ci) => ({...c, id:gi+'-'+ci, gi})).sort(() => Math.random() - 0.5); qQ = chars.slice(0, Math.min(chars.length, 20)); qI = 0; qC = 0; qW = []; _busy = false; ss('quiz'); rq(); }
-function startAll() { qM = 'mixed'; const chars = getAll().sort(() => Math.random() - 0.5); qQ = chars.slice(0, Math.min(chars.length, 20)); qI = 0; qC = 0; qW = []; _busy = false; ss('quiz'); rq(); }
+
+function startQuiz(m) {
+  qM = m;
+  const chars = getDue();
+  if (chars.length === 0) { alert('今日已全部复习完！休息一下吧 🎉'); return; }
+  qQ = chars.slice(0, Math.min(chars.length, 15));
+  qI = 0; qC = 0; qW = []; _busy = false;
+  ss('quiz');
+  rq();
+}
+
+function startG(gi) {
+  qM = 'mixed';
+  const chars = GROUPS[gi].chars.map((c, ci) => ({...c, id:gi+'-'+ci, gi})).sort(() => Math.random() - 0.5);
+  qQ = chars.slice(0, Math.min(chars.length, 20));
+  qI = 0; qC = 0; qW = []; _busy = false;
+  ss('quiz');
+  rq();
+}
+
+function startAll() {
+  qM = 'mixed';
+  const chars = getAll().sort(() => Math.random() - 0.5);
+  qQ = chars.slice(0, Math.min(chars.length, 20));
+  qI = 0; qC = 0; qW = []; _busy = false;
+  ss('quiz');
+  rq();
+}
+
 function rq() {
+  closeHw();
   const t = qQ.length;
   document.getElementById('pFill').style.width = Math.round(qI / t * 100) + '%';
   document.getElementById('qCnt').textContent = (qI + 1) + '/' + t;
   _cur = qQ[qI];
   if (qM === 'pin') {
     document.getElementById('qPrompt').textContent = _cur.char;
-    document.getElementById('qHint').textContent = '选择正确的拼音';
-    buildPin(_cur);
+    document.getElementById('qHint').textContent = '用手写输入法写出这个字的拼音';
   } else {
-    
-    document.getElementById('qPrompt').innerHTML = '<span style="font-size:44px">'+_cur.pinyin+'</span>';
-    document.getElementById('qHint').textContent = '选择正确的汉字';
-    buildChr(_cur);
+    document.getElementById('qPrompt').textContent = _cur.pinyin;
+    document.getElementById('qHint').textContent = '用手写输入法写出这个字';
   }
+  setTimeout(() => openHw(), 100);
 }
-function buildPin(correct) {
-  const all = getAll().filter(x => x.id !== correct.id).sort(() => Math.random() - 0.5).slice(0, 3);
-  const choices = [correct, ...all].sort(() => Math.random() - 0.5);
-  const cont = document.getElementById('qChos'); cont.innerHTML = '';
-  choices.forEach(ch => {
-    const btn = document.createElement('button');
-    btn.className = 'ch'; btn.textContent = ch.pinyin;
-    btn.addEventListener('click', () => handlePin(ch.pinyin, correct.pinyin));
-    cont.appendChild(btn);
-  });
+
+
+function openHw() {
+  const inp = document.getElementById('hwInput');
+  inp.value = '';
+  if (qM === 'pin') {
+    document.getElementById('hwHint').textContent = '写拼音，不需要声调';
+    inp.placeholder = '如 shuang';
+  } else {
+    document.getElementById('hwHint').textContent = '用手写输入法写汉字';
+    inp.placeholder = '写汉字，如 霜';
+  }
+  document.getElementById('hwPanel').classList.add('active');
+  setTimeout(() => inp.focus(), 50);
 }
-function buildChr(correct) {
-  const all = getAll().filter(x => x.id !== correct.id).sort(() => Math.random() - 0.5).slice(0, 3);
-  const choices = [correct, ...all].sort(() => Math.random() - 0.5);
-  const cont = document.getElementById('qChos'); cont.innerHTML = '';
-  choices.forEach(ch => {
-    const btn = document.createElement('button');
-    btn.className = 'ch'; btn.textContent = ch.char;
-    btn.addEventListener('click', () => handleCh(ch.char, correct.char));
-    cont.appendChild(btn);
-  });
+
+function closeHw() {
+  document.getElementById('hwPanel').classList.remove('active');
+  document.getElementById('hwInput').blur();
 }
-function handlePin(val, correct) {
-  if (_busy) return; _busy = true;
-  document.querySelectorAll('.ch').forEach(b => b.classList.add('wip'));
-  const isOk = val === correct;
+
+function doSubmit(val, correct) {
+  if (_busy) return;
+  _busy = true;
+  const isOk = qM === 'pin' ? st(val) === st(correct) || st(correct).includes(st(val)) : val === correct;
   document.querySelectorAll('.ch').forEach(b => {
+    b.classList.add('wip');
     if (b.textContent === correct) b.classList.add('ok');
+    if (!isOk && b.textContent === val) b.classList.add('no');
   });
-  if (!isOk) { document.querySelectorAll('.ch').forEach(b => { if (b.textContent === val) b.classList.add('no'); }); }
-  if (isOk) { qC++; up(_cur.id, 2); flash('✅', 400); }
-  else { qW.push(_cur); up(_cur.id, 0); flash('❌', 900); }
+  if (isOk) { qC++; up(_cur.id, 2); flash('\u2705', 400); }
+  else { qW.push(_cur); up(_cur.id, 0); flash('\u274c', 900); }
   setTimeout(() => { qI++; _busy = false; if (qI >= qQ.length) showResult(); else rq(); }, isOk ? 600 : 1100);
 }
-function handleCh(val, correct) {
-  if (_busy) return; _busy = true;
-  document.querySelectorAll('.ch').forEach(b => b.classList.add('wip'));
-  const isOk = val === correct;
-  document.querySelectorAll('.ch').forEach(b => {
-    if (b.textContent === correct) b.classList.add('ok');
-  });
-  if (!isOk) { document.querySelectorAll('.ch').forEach(b => { if (b.textContent === val) b.classList.add('no'); }); }
-  if (isOk) { qC++; up(_cur.id, 2); flash('✅', 400); }
-  else { qW.push(_cur); up(_cur.id, 0); flash('❌', 900); }
-  setTimeout(() => { qI++; _busy = false; if (qI >= qQ.length) showResult(); else rq(); }, isOk ? 600 : 1100);
+
+function flash(emoji, ms) {
+  const el = document.getElementById('qOv');
+  document.getElementById('qRe').textContent = emoji;
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, ms);
 }
-function flash(emoji, ms) { const el = document.getElementById('qOv'); document.getElementById('qRe').textContent = emoji; el.style.display = 'flex'; setTimeout(() => { el.style.display = 'none'; }, ms); }
+
 function showResult() {
+  closeHw();
   const t = qQ.length, pct = Math.round(qC / t * 100);
   const ti = pct >= 80 ? 0 : pct >= 60 ? 1 : pct >= 40 ? 2 : 3;
-  const emojis = ['🎉','👍','💪','📚'];
+  const emojis = ['\ud83c\udf89','\ud83d\udc4d','\ud83d\udcaa','\ud83d\udcda'];
   const titles = ['太棒了！','很不错！','继续加油！','多练习几次！'];
   document.getElementById('rEmoji').textContent = emojis[ti];
   document.getElementById('rTitle').textContent = titles[ti];
@@ -283,9 +240,21 @@ function showResult() {
   else { wb.style.display = 'none'; window._rw = []; }
   ss('resultScreen');
 }
+
 function rp() {
-  const a = getAll(); let mastered = 0, learning = 0, weak = [];
-  a.forEach(c => { const p = gp(c.id); if (p.rp >= 4 && p.iv >= 7) mastered++; else if (p.rp > 0) learning++; if (p.rp > 0 && p.iv < 3) weak.push(c); });
+  const a = getAll();
+  let mastered = 0, learning = 0;
+  let masteredList = [], unmasteredList = [];
+  a.forEach(c => {
+    const p = gp(c.id);
+    if (p.rp >= 3 && p.iv >= 7) {
+      mastered++;
+      masteredList.push(c);
+    } else {
+      if (p.rp > 0) learning++;
+      unmasteredList.push(c);
+    }
+  });
   const pct = Math.round(mastered / a.length * 100);
   document.getElementById('overviewGrid').innerHTML = '<div class="oi"><div class="n">'+a.length+'</div><div class="l">总字数</div></div><div class="oi"><div class="n gld">'+learning+'</div><div class="l">学习中</div></div><div class="oi"><div class="n gn">'+mastered+'</div><div class="l">已掌握</div></div>';
   document.getElementById('mPct').textContent = pct + '%';
@@ -295,8 +264,30 @@ function rp() {
   let ghtml = '';
   GROUPS.forEach((g, gi) => { const s = getGStats(gi); const pct2 = Math.round(s.mastered / s.total * 100); ghtml += '<div class="gpi"><div class="gph"><span class="gpn">'+g.name+'</span><span class="gpc">'+s.mastered+'/'+s.total+' 掌握</span></div><div class="gt"><div class="gff" style="width:'+pct2+'%;background:'+colors[gi%4]+'"></div></div></div>'; });
   document.getElementById('gpiList').innerHTML = ghtml;
-  document.getElementById('weakChars2').innerHTML = weak.length > 0 ? weak.slice(0,30).map(c => '<span class="wc2">'+c.char+'</span>').join('') : '<div style="color:var(--muted);font-size:13px">暂无薄弱字，继续保持！</div>';
+  // mastered list: green chips with char + pinyin
+  document.getElementById('masteredList').innerHTML = masteredList.length > 0
+    ? masteredList.map(c => '<div class="char-chip"><span>'+c.char+'</span><span class="cp">'+c.pinyin+'</span></div>').join('')
+    : '<div style="color:#7a7a7a;font-size:13px">还没有已掌握的字，加油练习吧！</div>';
+  // unmastered list: gray chips for new, yellow for learning
+  document.getElementById('unmasteredList').innerHTML = unmasteredList.length > 0
+    ? unmasteredList.map(c => {
+        const p = gp(c.id);
+        const cls = p.rp === 0 ? 'new-chr' : '';
+        const label = p.rp === 0 ? '新学' : '学习中';
+        return '<div class="char-chip '+cls+'"><span>'+c.char+'</span><span class="cp">'+c.pinyin+'</span><span class="rp-label">'+label+'</span></div>';
+      }).join('')
+    : '<div style="color:#7a7a7a;font-size:13px">太棒了！全部掌握！🎉</div>';
 }
+
+function hwSubmit() {
+  const val = document.getElementById('hwInput').value.trim();
+  if (!val) { document.getElementById('hwInput').focus(); return; }
+  const correct = qM === 'pin' ? _cur.pinyin : _cur.char;
+  closeHw();
+  doSubmit(val, correct);
+}
+
+// EVENT BINDINGS
 document.getElementById('btnPin').addEventListener('click', () => startQuiz('pin'));
 document.getElementById('btnChr').addEventListener('click', () => startQuiz('chr'));
 document.getElementById('btnGroup').addEventListener('click', () => ss('groupSelect'));
@@ -304,11 +295,15 @@ document.getElementById('btnParent').addEventListener('click', () => ss('parentS
 document.getElementById('btnBackHome').addEventListener('click', () => ss('home'));
 document.getElementById('btnBackHome2').addEventListener('click', () => ss('home'));
 document.getElementById('btnAll').addEventListener('click', startAll);
+document.getElementById('glist').addEventListener('click', e => { const gc = e.target.closest('.gc'); if (gc) startG(parseInt(gc.dataset.gi)); });
 document.getElementById('btnQuit').addEventListener('click', () => { if (confirm('确定退出练习？')) ss('home'); });
 document.getElementById('retryBtn').addEventListener('click', () => { if (window._rw && window._rw.length > 0) { qQ = window._rw.slice().sort(() => Math.random() - 0.5); qI = 0; qC = 0; qW = []; _busy = false; ss('quiz'); rq(); } });
 document.getElementById('btnCloseParent').addEventListener('click', () => ss('home'));
 document.getElementById('btnReset').addEventListener('click', () => { if (confirm('确定要重置所有进度吗？此操作不可撤销。')) { state = {}; sv(); rp(); } });
-document.getElementById('glist').addEventListener('click', e => { const gc = e.target.closest('.gc'); if (gc) startG(parseInt(gc.dataset.gi)); });
+document.getElementById('hwOkBtn').addEventListener('click', hwSubmit);
+document.getElementById('hwCancelBtn').addEventListener('click', closeHw);
+document.getElementById('hwInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); hwSubmit(); } });
+
 rh();
 </script>
 </body>
